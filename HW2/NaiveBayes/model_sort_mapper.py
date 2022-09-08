@@ -8,7 +8,8 @@ we'll omit them from the mapper output.
 INPUT:
     word \t hamCount,spamCount,pHam,pSpam
 OUTPUT:
-    word \t hamCount,spamCount,pHam,pSpam \t maxClass \t maxClassProbabilty
+    word \t hamCount,spamCount,pHam,pSpam \t ClassHam \t pHam
+    word \t hamCount,spamCount,pHam,pSpam \t ClassSpam \t pSpam
 """
 import sys
 for line in sys.stdin:
@@ -16,5 +17,5 @@ for line in sys.stdin:
     ham_cProb, spam_cProb = payload.strip().split(',')[2:]
     
     if word != "ClassPriors":
-        print(f"{word}\t{payload}\tham\t{ham_cProb}")
-        print(f"{word}\t{payload}\tspam\t{spam_cProb}")
+        print(f"{word}\t{payload}\tham\t{float(ham_cProb):f}")
+        print(f"{word}\t{payload}\tspam\t{float(spam_cProb):f}")
