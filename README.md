@@ -45,6 +45,13 @@ The homeworks above are individually authored and independently executed; a Sect
 final project also exists but is not included here as it reflects team-planning work rather
 than completed individual implementation.
 
+## Code Comments
+
+Some TODO comments appear in the HW2 mapper/reducer scripts (e.g., `train_mapper_count.py`).
+These were part of the assignment submission format and template instructions from the course,
+not indicators of incomplete work. The code implementations are complete and functional — the
+comments were left in as-is from the assignment.
+
 ## Reflection
 
 This coursework is the direct precedent for the distributed-systems and evaluation thinking
