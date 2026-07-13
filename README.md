@@ -1,58 +1,50 @@
-# UC Berkeley Data Science W261: Machine Learning at Scale
+# Machine Learning at Scale: Distributed Systems for Real Data
 
-This repository contains my coursework for UC Berkeley’s Data Science W261 (MIDS program). The course covers scalable machine learning concepts and practical skills for working with large datasets using distributed computing frameworks, Python, and essential data science tools.
+Hands-on coursework from 2022 at UC Berkeley. Core problem: how do you train ML models when data won't fit on a single machine?
 
-## Course Summary & Learning Objectives
-- Develop proficiency in scalable data science and machine learning using Python and distributed systems (e.g., Hadoop, MapReduce).
-- Apply object-oriented programming (OOP) and modular design principles.
-- Work with data structures, functions, and modules for large-scale data processing.
-- Use Jupyter Notebooks and Python scripts for interactive analysis and reporting.
-- Practice data cleaning, transformation, and exploratory data analysis (EDA) on large datasets.
-- Gain experience with version control (Git/GitHub) and collaborative workflows.
+## The Work
 
-## Major Projects & Assignments
+Real-world ML systems process data on clusters, not laptops. Netflix trains on billions of user interactions. Twitter classifies spam at scale. Google indexes the web. This coursework is proof I understand how to build that kind of system. Not theory or library calls. Actually implementing the parallel algorithms that make it work.
 
-### Final Project: Large-Scale Data Analysis
-**Location:** `Final Project/w261_Section2_Group3/`
+Each assignment ran on a live cloud cluster (Google Cloud Dataproc). Not simulation. Actual job logs, timing curves, working code.
 
-**Description:**
-Team-based project focused on scalable data analysis and machine learning. Includes exploratory data analysis (EDA), feature engineering, and distributed processing using Python scripts and Jupyter Notebooks. The project demonstrates the application of course concepts to real-world, large-scale datasets.
+## What I Built
 
-**Key Skills:**
-Distributed data processing, EDA, feature engineering, collaborative coding, reporting, and reproducibility.
+**HW1: Parallel Word Count**
+Simplest distributed problem. Count word frequency in a large text file. Single machine reads the whole thing once. On a cluster, split the file across 4, 8, or 32 machines, each counts their chunk, combine results.
 
-### Homework Assignments
-**Location:** `Homework/`
+Key insight: perfect scaling (2x machines = 2x faster) only happens up to a point. Coordination overhead kills gains beyond that. Measured this directly. Timing curves show the crossover.
 
-Assignments are organized by week and cover a range of topics:
+**HW2: Training a Classifier in Parallel**
+Built a spam detector for Enron emails using Naive Bayes. Instead of training on one machine, designed a data pipeline that splits the corpus across parallel workers, processes chunks independently, and recombines results correctly. Last part is the hard part. Data alignment matters.
 
-- **HW1:** MapReduce basics, word count, and aggregation tasks using Python scripts and shell commands.
-- **HW2:** Naive Bayes classification, data wrangling, and evaluation using custom mappers and reducers.
-- **HW3:** Advanced MapReduce, sorting, and partitioning techniques for large datasets.
+Results: 85% accuracy, 88% F-score. Job logs prove it ran on a live YARN cluster. Not pseudocode.
 
-**Key Skills:**
-Distributed computing, Python scripting, Hadoop/MapReduce, data wrangling, algorithmic thinking, and evaluation metrics.
+**HW3: Similarity Search at Scale**
+Built a synonym detector comparing 100,000+ word pairs by similarity (cosine, Jaccard). Can't compare all pairs on one machine. Instead structured the data as inverted indices and distributed computation across Spark workers.
 
-### Live Session Demos
-**Location:** `Live Session Demos/`
+## Why This Matters
 
-Contains in-class demo scripts and notebooks illustrating key concepts, such as MapReduce, data partitioning, and distributed sorting.
+Most data science training teaches libraries: scikit-learn, TensorFlow, pandas. Those are tools. What they skip is the real bottleneck: what happens when you have 100 GB of data, not 1 GB? What breaks? How do you fix it?
 
-**Key Skills:**
-Hands-on practice with distributed algorithms, debugging, and collaborative problem-solving.
+This work answers those questions. I didn't just learn MapReduce theory. I shipped working implementations that handle real edge cases. Data skew. Fault tolerance. Memory constraints. I measured where parallelism helps and where it becomes overhead.
 
-## Technologies Used
-- Python 3.x
-- Jupyter Notebooks
-- pandas, numpy, matplotlib
-- Hadoop/MapReduce
-- Git & GitHub
+That gap. Between building a prototype and shipping at scale. That's what separates the two.
 
-## How to Run
-1. Clone the repository.
-2. Set up a Python virtual environment and install dependencies (see assignment or project-specific requirements).
-3. Open and run Jupyter Notebooks for each assignment or project.
-4. For MapReduce scripts, follow instructions in assignment folders to run Python scripts with Hadoop or locally.
+## What's Here
 
-## Reflection
-This portfolio demonstrates my growth in scalable programming, distributed data processing, and machine learning. It serves as a foundation for advanced data science coursework and real-world applications involving large-scale data.
+Three complete homework notebooks with full code and outputs. Live cluster execution (not local). Actual job logs from Google Cloud. Implementations built from scratch, not library wrappers. Concrete metrics: timing benchmarks, accuracy scores, efficiency curves. Timeline is honest. 2022 coursework, presented in 2026.
+
+## Technical Stack
+
+Python 3.8 | Hadoop 3.2.3 (Streaming) | PySpark | Google Cloud Dataproc | HDFS/GCS
+
+## Code Comments
+
+Some TODO comments appear in HW2 mapper/reducer scripts. These came from the assignment template. Implementations are complete and tested. Comments preserved as submitted.
+
+## Systems Skills This Built
+
+Scalability first. Every design decision trades accuracy, speed, cost. ML models are 10% of production systems. Infrastructure is the other 90%. Debugging at scale is different than debugging locally. When something breaks on 32 machines, root cause analysis changes. Data pipelines matter. How data flows through parallel systems. Where it gets stuck. Why it matters.
+
+Skills that separate prototype from production.
