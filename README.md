@@ -16,9 +16,7 @@ Simplest distributed problem. Count word frequency in a large text file. Single 
 Key insight: perfect scaling (2x machines = 2x faster) only happens up to a point. Coordination overhead kills gains beyond that. Measured this directly. Timing curves show the crossover.
 
 **HW2: Training a Classifier in Parallel**
-Built a spam detector for Enron emails using Naive Bayes. Instead of training on one machine, designed a data pipeline that splits the corpus across parallel workers, processes chunks independently, and recombines results correctly. Last part is the hard part. Data alignment matters.
-
-Results: 85% accuracy, 88% F-score. Job logs prove it ran on a live YARN cluster. Not pseudocode.
+Built custom mapper/reducer scripts to train a Naive Bayes spam classifier on the Enron corpus using Hadoop Streaming. Implemented the order-inversion pattern with a custom KeyFieldBasedPartitioner to handle data skew across parallel workers. Training phase executed on a live YARN cluster with actual job logs. Algorithm produces correct conditional probabilities matching expected results. Encountered failure during final output phase, a real lesson in why distributed systems require robustness at every layer.
 
 **HW3: Similarity Search at Scale**
 Built a synonym detector comparing 100,000+ word pairs by similarity (cosine, Jaccard). Can't compare all pairs on one machine. Instead structured the data as inverted indices and distributed computation across Spark workers.
